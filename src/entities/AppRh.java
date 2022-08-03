@@ -23,6 +23,12 @@ public class AppRh {
 			
 			System.out.print("Id: ");
 			Integer id = tec.nextInt();
+			while (hasId(funcion, id)) {
+				System.out.println("Esse id esta registrado com outro funcionário! Tente novamente:");
+				id = tec.nextInt();
+			}
+			
+			
 			
 			System.out.print("Nome: ");
 			tec.nextLine();
@@ -39,21 +45,25 @@ public class AppRh {
 		System.out.println("");
 		System.out.print("Entrar com o id do funcionário que vai receber o aumento");
 		int idFuncionario = tec.nextInt();
-		Integer pos = positionId(funcion, idFuncionario);
-		if (pos == null) {
+		
+		Funcionarios fun = funcion .stream().filter(x -> x.getId() == idFuncionario).findFirst().orElse(null);
+		
+		// Integer pos = positionId(funcion, idFuncionario);
+		
+		if (fun == null) {
 			System.out.println("Esse id não existe:");
 		}
 		else {
 			System.out.print("Quantos porcento vai ser o aumento? ");
 			double porcentagem = tec.nextDouble();
-			funcion.get(pos).aumentoDeSalario(porcentagem);
+			fun.aumentoDeSalario(porcentagem);
 		}
 		
 		System.out.println("");
 		System.out.println("Lista de funcionários ");
 		
-		for(Funcionarios fun: funcion) {
-			System.out.println(fun);
+		for(Funcionarios f: funcion) {
+			System.out.println(f);
 		}
 		
 		tec.close();
@@ -64,10 +74,14 @@ public class AppRh {
 		for(int i = 0; i < funcion.size(); i++) {
 			if(funcion.get(i).getId() == id) {
 				return i;
-			}
-				
+			}	
 		}
 		return null;
+	}
+	
+	public static boolean hasId(List<Funcionarios> funcion, int id) {
+		Funcionarios fun = funcion.stream().filter(x -> x.getId() == id).findFirst().orElse(null);
+		return fun != null;
 	}
 	
 }
